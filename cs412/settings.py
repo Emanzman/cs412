@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&)^uv)+(^q!cr&df$dq(3!#j$=39!txws0q&@n1*9z@e$(kw=9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['cs-webapps.bu.edu']
+ALLOWED_HOSTS = ['cs-webapps.bu.edu', '*']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'quotes', #NEW
+
 
 ]
 
