@@ -1,0 +1,13 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}About Martin Luther King Jr.{% endblock %}
+
+{% block content %}
+<h1>{{ name }}</h1>
+<p>{{ persons_description|linebreaksbr }}</p>
+
+<h1>Web Application Created by: </h1>
+<p>{{ creator }}</p>
+<p>{{ creator_description }}</p>
+
+{% endblock %}
