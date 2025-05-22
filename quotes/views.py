@@ -3,6 +3,8 @@ import random
 
 # Create your views here.
 
+# List of MLK images and quotes 
+
 quotes_list = ["Darkness cannot drive out darkness, only light can do that. Hate cannot drive out hate, only love can do that.",
                "The ultimate measure of a man is not where he stands in moments of comfort and convenience, but where he stands at times of challenge and controversy.",
                "True peace is not merely the absence of tension; it is the presence of justice.",
@@ -25,7 +27,7 @@ images_list = ["https://www.uncsa.edu/chancellor/communications/img/martin-luthe
 
 
 ]
-
+# Posts a quote each time the page is reloaded
 def quote(request):
   template_name = 'quotes/quote.html'
   context = {
@@ -35,6 +37,7 @@ def quote(request):
 
   return render(request, template_name, context)
 
+# Shows every image and quote from MLK
 def show_all(request):
   template_name = 'quotes/show_all.html'
   context = {
@@ -44,6 +47,7 @@ def show_all(request):
 
   return render(request, template_name, context)
 
+# About description of MLK
 def about(request):
   template_name= 'quotes/about.html'
   context = {
