@@ -1,0 +1,18 @@
+<!-- Foundation HTML page that other html pages extend from-->
+
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+
+<head>
+  <link rel="stylsheet" href="{% static 'styles2.css' %}">
+</head>
+
+<body>
+  <h1><a href="{% url 'main' %}">Anbessa Ethiopian Restaurant</a></h1>
+  {% block content %}{% endblock %}
+</body>
+
+</html>

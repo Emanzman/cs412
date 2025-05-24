@@ -1,0 +1,17 @@
+{% extends "restaurant/base.html" %}
+
+{% block content %}
+
+<!-- Home page for the restaurant-->
+<h1>Welcome to Anbessa Ethiopian Restaurant</h1>
+<p>
+  {{ restaurant_description }}
+</p>
+<img
+  src="https://www.azcentral.com/gcdn/presto/2022/01/12/PPHX/49e00f2e-1430-4414-849b-3bf0dd0631f6-IMG_8343.jpeg?crop=1241,699,x0,y59&width=660&height=372&format=pjpg&auto=webp">
+<img src="https://media.cnn.com/api/v1/images/stellar/prod/190205144959-shekla-tibs.jpg?q=w_1110,c_fill">
+<img src="https://explorestlouis.com/wp-content/uploads/2023/01/Meskerem-Ethiopian-Restaurant-Web-1-1200x800.jpg">
+
+<p><a href="{% url 'order' %}">Order Here</a></p>
+
+{% endblock %}
