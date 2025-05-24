@@ -3,31 +3,34 @@
 {% block content %}
 
 <!-- Page displaying form taking food orders-->
+<div class="order-page">
+  <h3>Order Page</h3>
+  <form action="{% url 'confirmation' %}" method="POST">
+    {% csrf_token %}
 
-<h3>Order Page</h3>
-<form action="{% url 'confirmation' %}" method="POST">
-  {% csrf_token %}
+    <label class=>Name: <input type="text" name="name" required></label><br>
+    <label>Phone: <input type="text" name="phone" required></label><br>
+    <label>Email: <input type="text" name="email" required></label><br>
+    <label>Special Instructions: <input type="text" name="special_instructions"></label><br>
 
-  <label>Name:<input type="text" name="name" required></label><br>
-  <label>Phone:<input type="text" name="phone" required></label><br>
-  <label>Email:<input type="text" name="email" required></label><br>
-  <label>Special Instructions:<input type="text" name="special_instructions"></label><br>
+    <h3>Menu Items</h3>
+    <label><input type="checkbox" name="Kitfo">Kitfo - $22</label>
+    <div class="kitfo-extras">
+      Kitfo Extras: <br>
+      <label><input type="checkbox" name="kitfo_extras" value="Ib">Ib</label>
+      <label><input type="checkbox" name="kitfo_extras" value="Gomen">Gomen</label>
+      <label><input type="checkbox" name="kitfo_extras" value="Extra Mitmita">Extra Mitmita</label>
+    </div>
 
-  <h3>Menu Items</h3>
-  <label><input type="checkbox" name="Kitfo">Kitfo - $22</label>
-  <p>Kitfo Extras
-    <label><input type="checkbox" name="kitfo_extras" value="Ib">Ib</label>
-    <label><input type="checkbox" name="kitfo_extras" value="Gomen">Gomen</label>
-    <label><input type="checkbox" name="kitfo_extras" value="Extra Mitmita">Extra Mitmita</label>
-  </p>
+    <label><input type="checkbox" name="Tibs">Tibs - $20</label><br>
+    <label><input type="checkbox" name="Doro">Doro - $15</label><br>
 
-  <label><input type="checkbox" name="Tibs">Tibs - $20</label><br>
-  <label><input type="checkbox" name="Doro">Doro - $15</label><br>
+    <label><input type="checkbox" name="{{ daily_special }}">{{ daily_special}} - Daily Special - 30$</label><br>
+    <input type="hidden" name="daily_special" value="{{ daily_special }}"><br>
 
-  <label><input type="checkbox" name="{{ daily_special }}">{{ daily_special}} - Daily Special - 30$</label><br>
-  <input type="hidden" name="daily_special" value="{{ daily_special }}"><br>
+    <input type="submit">
 
-  <input type="submit">
+  </form>
+</div>
 
-</form>
 {% endblock %}

@@ -12,11 +12,9 @@
 
 <h3>Food Ordered:</h3>
 
-<ul>
-  {%for food_item in ordered %}
-  <li>{{ food_item }}</li>
-  {% endfor %}
-</ul>
+{% for food_item in ordered %}
+<p>{{ food_item }}</p>
+{% endfor %}
 
 <p>Total Price: $ {{ total }}</p>
 <p>Food will be ready on: {{ finish_date }} at {{ finish_time }}</p>
