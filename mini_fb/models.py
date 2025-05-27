@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+# Creates a profile model that gives details of the user's profile information
 class Profile(models.Model):
   first_name = models.CharField(blank=False)
   last_name = models.CharField(blank=False)

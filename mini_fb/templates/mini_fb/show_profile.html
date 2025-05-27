@@ -2,11 +2,15 @@
 
 {% block content %}
 
+<!-- Link to view all profiles-->
 <a href="{% url 'show_all_profiles' %}" class="all-profiles-link">All Profiles</a>
 
+<!-- Display of users full name-->
 <h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
 
+<!-- Table displaying the users profile-->
 <table class="single-profile">
+  <!-- Categories of profile information displayed -->
   <thead>
     <tr>
       <th>Profile Image</th>
@@ -16,6 +20,7 @@
     </tr>
   </thead>
 
+  <!-- Information section for profile-->
   <tbody>
     <tr>
       <td><img src="{{ profile.profile_image_url }}" class="larger-image"></td>

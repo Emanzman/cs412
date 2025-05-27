@@ -7,14 +7,16 @@ from .models import Profile
 
 # Create your views here.
 
+# View to display a list of all the user profiles
 class ShowAllProfilesView(ListView):
   model = Profile
   template_name = 'mini_fb/show_all_profiles.html'
   context_object_name = 'profiles'
 
+# View to display a single user profile
 class ShowProfilePageView(DetailView):
   model = Profile
   template_name = 'mini_fb/show_profile.html'
   context_object_name = 'profile'
 
-  
+
