@@ -7,7 +7,7 @@ class Profile(models.Model):
   last_name = models.CharField(blank=False)
   city = models.CharField(blank=False)
   email= models.EmailField(blank=False)
-  profile_image_url = models.URLField(blank=True)
+  profile_image_url = models.URLField(blank=False)
 
 
 
