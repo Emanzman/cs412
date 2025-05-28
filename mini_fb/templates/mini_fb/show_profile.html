@@ -31,4 +31,14 @@
   </tbody>
 </table>
 
+<h2>{{ profile.first_name }} {{ profile.last_name }}'s Status Messages:</h2>
+
+{% if profile.get_status_messages %}
+{% for status_message in profile.get_status_messages %}
+<p>{{ status_message }}</p>
+{% endfor %}
+{% else %}
+<p>There are no status messages on this profile.</p>
+{% endif %}
+
 {% endblock %}
