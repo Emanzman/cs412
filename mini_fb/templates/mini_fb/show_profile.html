@@ -8,37 +8,45 @@
 <!-- Display of users full name-->
 <h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
 
-<!-- Table displaying the users profile-->
-<table class="single-profile">
-  <!-- Categories of profile information displayed -->
-  <thead>
-    <tr>
-      <th>Profile Image</th>
-      <th>Name</th>
-      <th>City</th>
-      <th>Email</th>
-    </tr>
-  </thead>
+<div class="full-profile-content">
+  <!-- Table displaying the users profile-->
+  <table class="single-profile">
+    <!-- Categories of profile information displayed -->
+    <thead>
+      <tr>
+        <th>Profile Image</th>
+        <th>Name</th>
+        <th>City</th>
+        <th>Email</th>
+      </tr>
+    </thead>
 
-  <!-- Information section for profile-->
-  <tbody>
-    <tr>
-      <td><img src="{{ profile.profile_image_url }}" class="larger-image"></td>
-      <td>{{ profile.first_name }} {{ profile.last_name }}</td>
-      <td>{{ profile.city }}</td>
-      <td>{{ profile.email }}</td>
-    </tr>
-  </tbody>
-</table>
+    <!-- Information section for profile-->
+    <tbody>
+      <tr>
+        <td><img src="{{ profile.profile_image_url }}" class="larger-image"></td>
+        <td>{{ profile.first_name }} {{ profile.last_name }}</td>
+        <td>{{ profile.city }}</td>
+        <td>{{ profile.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Section for displaying the status message and option to create a status.-->
+  <div class="status-display">
+    <h2>{{ profile.first_name }} {{ profile.last_name }}'s Status Messages:</h2>
 
-<h2>{{ profile.first_name }} {{ profile.last_name }}'s Status Messages:</h2>
+    {% if profile.get_status_messages %}
+    {% for status_message in profile.get_status_messages %}
+    <p>{{ status_message }}</p>
+    {% endfor %}
+    {% else %}
+    <p>There are no status messages on this profile.</p>
+    {% endif %}
 
-{% if profile.get_status_messages %}
-{% for status_message in profile.get_status_messages %}
-<p>{{ status_message }}</p>
-{% endfor %}
-{% else %}
-<p>There are no status messages on this profile.</p>
-{% endif %}
+    <!-- Link to create status -->
 
+    <a href="{% url 'create_status' profile.pk %}">Create a Status</a>
+
+  </div>
+</div>
 {% endblock %}

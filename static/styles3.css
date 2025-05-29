@@ -22,7 +22,9 @@ header {
   font-size: 30px;
 }
 
-main {}
+main {
+  padding-bottom: 50px;
+}
 
 footer {
   background-color: rgb(226, 224, 224);
@@ -32,6 +34,8 @@ footer {
   width: 100%;
   padding-left: 30px;
 }
+
+/* Table for the display of profile content */
 
 table {
   margin: 0 auto;
@@ -47,6 +51,8 @@ td {
 
 }
 
+/* General styling for all links */
+
 a {
   color: rgb(35, 117, 204);
   display: block;
@@ -54,23 +60,57 @@ a {
   padding: 20px;
 }
 
+/* Image displaying on all profiles */
+
 .smaller-image {
   width: 200px;
 
 }
 
+/* Image displaying on specific profile page */
+
 .larger-image {
   width: 400px;
 }
 
-.single-profile {
-  border: 4px solid rgb(32, 102, 177);
-  border-radius: 25px;
-
-}
+/* Link directing to all profiles page */
 
 .all-profiles-link {
   text-align: left;
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 40px;
+}
+
+/* Form to create a profile */
+
+.profile-form {
+  text-align: center;
+}
+
+/* Form to create a status */
+
+.status-form {
+  text-align: center;
+}
+
+/* Display of all the status messages */
+
+.status-display {
+  text-align: center;
+  color: rgb(35, 117, 204);
+}
+
+/* Content portion on the specific profile page */
+.full-profile-content {
+  border: 4px solid rgb(32, 102, 177);
+  border-radius: 25px;
+}
+
+
+/* Link to create a profile */
+.create-profile-link {
+  margin-top: 30px;
+  position: absolute;
+  top: 0;
+  left: 1;
 }
