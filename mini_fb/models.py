@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 # Create your models here.
 
@@ -12,7 +13,10 @@ class Profile(models.Model):
   profile_image_url = models.URLField(blank=False)
 
   def get_status_messages(self):
-    return self.statusmessage_set.all().order_by('-timestamp')
+    return StatusMessage.objects.filter(profile=self).order_by('-timestamp')
+  
+  def get_absolute_url(self):
+    return reverse("show_profile", kwargs={"pk": self.pk})
 
 
 class StatusMessage(models.Model):

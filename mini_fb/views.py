@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-
-
+from django.views.generic.edit import CreateView
+from .forms import CreateProfileForm
 from .models import Profile
 
 # Create your views here.
@@ -18,5 +18,12 @@ class ShowProfilePageView(DetailView):
   model = Profile
   template_name = 'mini_fb/show_profile.html'
   context_object_name = 'profile'
+
+class CreateProfileView(CreateView):
+  model = Profile
+  template_name="mini_fb/create_profile_form.html"
+  form_class = CreateProfileForm
+
+
 
 
