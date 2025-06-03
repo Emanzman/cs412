@@ -31,9 +31,20 @@ class StatusMessage(models.Model):
 
   def __str__(self):
     # Returns a string that displays the status message along with the datae and time.
-    return f"{self.message} {self.timestamp.strftime('%B %d %Y, %I:%M %p')}."  
+    return f"{self.message} {self.timestamp.strftime('%B %d %Y, %I:%M %p')}."
 
+  def get_images(self):
+    return Image.objects.filter(statusimage__status_message=self)  
 
+class Image(models.Model):
+  profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  image_file = models.ImageField()
+  timestamp = models.DateTimeField(default=timezone.now)
+  caption = models.CharField(blank=True)
+
+class StatusImage(models.Model):
+  image = models.ForeignKey(Image, on_delete=models.CASCADE)
+  status_message = models.ForeignKey(StatusMessage, on_delete=models.CASCADE)
 
 
 
