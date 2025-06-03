@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from .forms import CreateProfileForm, CreateStatusMessageForm
-from .models import Profile, StatusMessage
+from .models import Profile, StatusMessage, Image, StatusImage
 from django.urls import reverse
 
 
@@ -45,10 +45,22 @@ class CreateStatusMessageView(CreateView):
     return context
   
   def form_valid(self, form):
+      
       # Associates the status message to the specific user profile
       pk = self.kwargs['pk'] # Gets primary key from the url
       profile = Profile.objects.get(pk=pk) # Gets profile object using the primary key.
       form.instance.profile = profile # Associates the profile to the status message.
+      
+      sm = form.save()
+      files = self.request.FILES.getlist('files')
+
+      for file in files:
+         image = Image(profile=sm.profile, image_file=file)
+         image.save()
+
+         status_image = StatusImage(image=image, status_message=sm)
+         status_image.save()
+         
       return super().form_valid(form) # Calls superclass method and submits the form if valid.
   
   def get_success_url(self):
