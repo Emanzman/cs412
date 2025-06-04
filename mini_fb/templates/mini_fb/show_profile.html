@@ -38,18 +38,20 @@
     {% if profile.get_status_messages %}
     {% for status_message in profile.get_status_messages %}
     <p>{{ status_message }}</p>
-    {% for img in status_message.get_images %}
 
+    {% for img in status_message.get_images %}
     <img src='{{img.image_file.url}}' class="smaller-image">
     {% endfor %}
+
     {% endfor %}
     {% else %}
     <p>There are no status messages on this profile.</p>
     {% endif %}
 
-    <!-- Link to create status -->
+    <!-- Link to create status and update profile-->
 
     <a href="{% url 'create_status' profile.pk %}">Create a Status</a>
+    <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
 
   </div>
 </div>

@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
-from .forms import CreateProfileForm, CreateStatusMessageForm
+from django.views.generic.edit import CreateView, UpdateView
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from .models import Profile, StatusMessage, Image, StatusImage
 from django.urls import reverse
 
@@ -69,7 +69,10 @@ class CreateStatusMessageView(CreateView):
       return reverse('show_profile', kwargs={'pk':pk})
 
 
-
+class UpdateProfileView(UpdateView):
+   model = Profile
+   template_name = 'mini_fb/update_profile_form.html'
+   form_class = UpdateProfileForm
 
 
 
