@@ -22,6 +22,23 @@ class Profile(models.Model):
   def get_absolute_url(self):
     # Calls reverse and returns a URL for the specific profile.
     return reverse("show_profile", kwargs={"pk": self.pk})
+  
+  def get_friends(self):
+    friends_profile1 = Friend.objects.filter(profile1=self)
+    friends_profile2 = Friend.objects.filter(profile2=self)
+
+    friends_list = []
+
+    for friend in friends_profile1:
+      friends_list.append(friend.profile2)
+
+    for friend in friends_profile2:
+      friends_list.append(friend.profile1)
+
+    return friends_list
+
+
+    
 
 
 class StatusMessage(models.Model):
@@ -49,6 +66,14 @@ class StatusImage(models.Model):
   # Model that finds which status image is related to which image
   image = models.ForeignKey(Image, on_delete=models.CASCADE)
   status_message = models.ForeignKey(StatusMessage, on_delete=models.CASCADE)
+
+class Friend(models.Model):
+  profile1 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
+  profile2 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')
+  timestamp = models.DateTimeField(default=timezone.now)
+  
+  def __str__(self):
+    return f"{self.profile1.first_name} {self.profile1.last_name} & {self.profile2.first_name} {self.profile2.last_name}"
 
 
 

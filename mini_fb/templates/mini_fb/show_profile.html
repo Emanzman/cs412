@@ -63,5 +63,13 @@
       <a href="{% url 'update_profile' profile.pk %}" class="button profile-button">Update Profile</a>
     </div>
 
+    <h2>{{ profile.first_name }} {{ profile.last_name }}'s Friends:</h2>
+    {% for friend in profile.get_friends %}
+    <a href="{% url 'show_profile' friend.pk %}"><img src="{{ friend.profile_image_url }}" class="smaller-image"></a>
+    <a href="{% url 'show_profile' friend.pk %}">{{ friend.first_name }} {{ friend.last_name }}</a>
+    {% empty %}
+    <p>This user has no friends</p>
+    {% endfor %}
   </div>
+
   {% endblock %}
