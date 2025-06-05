@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
+# Defines the data models being used in the Mini Facebook web app
 # Create your models here.
 
 class Profile(models.Model):
@@ -34,15 +35,18 @@ class StatusMessage(models.Model):
     return f"{self.message} {self.timestamp.strftime('%B %d %Y, %I:%M %p')}."
 
   def get_images(self):
+    # Returns images from this status message
     return Image.objects.filter(statusimage__status_message=self)  
 
 class Image(models.Model):
+  # Model that represents and image uploaded from a profile
   profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
   image_file = models.ImageField()
   timestamp = models.DateTimeField(default=timezone.now)
   caption = models.CharField(blank=True)
 
 class StatusImage(models.Model):
+  # Model that finds which status image is related to which image
   image = models.ForeignKey(Image, on_delete=models.CASCADE)
   status_message = models.ForeignKey(StatusMessage, on_delete=models.CASCADE)
 

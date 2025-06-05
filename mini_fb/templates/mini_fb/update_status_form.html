@@ -1,0 +1,22 @@
+<!-- Webpage that updates a profile's status with a form-->
+
+
+{% extends "mini_fb/base.html" %}
+{% block content %}
+
+<h1>Update Your Status Message</h1>
+
+<div class="change-status-container">
+  <p>{{ status.message }}</p>
+  <p>{{ status.timestamp }}</p>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="status-submit-button">Update</button>
+  </form>
+  <form method="GET" action="{% url 'show_profile' status.profile.pk %}">
+    <button type="submit" class="status-submit-button">Cancel</button>
+  </form>
+</div>
+
+{% endblock %}

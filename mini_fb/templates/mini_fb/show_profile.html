@@ -1,9 +1,12 @@
+<!-- Webpage that shows the content of a profile -->
+
+
 {% extends 'mini_fb/base.html' %}
 
 {% block content %}
 
 <!-- Link to view all profiles-->
-<a href="{% url 'show_all_profiles' %}" class="all-profiles-link">All Profiles</a>
+<a href="{% url 'show_all_profiles' %}" class="button all-profiles-link">All Profiles</a>
 
 <!-- Display of users full name-->
 <h1>{{ profile.first_name }} {{ profile.last_name }}</h1>
@@ -37,11 +40,17 @@
 
     {% if profile.get_status_messages %}
     {% for status_message in profile.get_status_messages %}
-    <p>{{ status_message }}</p>
-
     {% for img in status_message.get_images %}
     <img src='{{img.image_file.url}}' class="smaller-image">
     {% endfor %}
+    <p>{{ status_message }}</p>
+
+
+
+    <div class="status-button-container">
+      <a href="{% url 'update_status' status_message.pk %}" class="button status-button">Update</a>
+      <a href="{% url 'delete_status' status_message.pk %}" class="button status-button">Delete</a>
+    </div>
 
     {% endfor %}
     {% else %}
@@ -49,10 +58,10 @@
     {% endif %}
 
     <!-- Link to create status and update profile-->
-
-    <a href="{% url 'create_status' profile.pk %}">Create a Status</a>
-    <a href="{% url 'update_profile' profile.pk %}">Update Profile</a>
+    <div class="profile-button-container">
+      <a href="{% url 'create_status' profile.pk %}" class="button profile-button">Create a Status</a>
+      <a href="{% url 'update_profile' profile.pk %}" class="button profile-button">Update Profile</a>
+    </div>
 
   </div>
-</div>
-{% endblock %}
+  {% endblock %}

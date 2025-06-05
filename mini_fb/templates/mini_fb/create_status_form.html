@@ -1,5 +1,6 @@
-{% extends 'mini_fb/base.html' %}
 <!-- Form that lets user create a status for their profile-->
+
+{% extends 'mini_fb/base.html' %}
 {% block content %}
 <h1>Post a status message for {{ profile.first_name }} {{ profile.last_name }} </h1>
 <form method="POST" action="{% url 'create_status' profile.pk %}" enctype="multipart/form-data" class="status-form">

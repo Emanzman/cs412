@@ -1,8 +1,9 @@
+<!-- Web page that lets users enter a form to create their own profile-->
+
 {% extends 'mini_fb/base.html' %}
 
-<!-- Web page that lets users enter a form to create their own profile-->
 {% block content %}
-<a href="{% url 'show_all_profiles' %}" class="all-profiles-link">All Profiles</a>
+<a href="{% url 'show_all_profiles' %}" class="button all-profiles-link">All Profiles</a>
 
 <h1>Create Your New Profile</h1>
 <form method="POST" class="profile-form">
