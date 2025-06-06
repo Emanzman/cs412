@@ -70,6 +70,8 @@
     {% empty %}
     <p>This user has no friends</p>
     {% endfor %}
+
+    <a href="{% url 'friend_suggestions' profile.pk %}" class="button">Friend Suggestions</a>
   </div>
 
   {% endblock %}

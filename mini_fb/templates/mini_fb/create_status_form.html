@@ -2,11 +2,14 @@
 
 {% extends 'mini_fb/base.html' %}
 {% block content %}
+
 <h1>Post a status message for {{ profile.first_name }} {{ profile.last_name }} </h1>
-<form method="POST" action="{% url 'create_status' profile.pk %}" enctype="multipart/form-data" class="status-form">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="file" name="files" multiple />
-  <button type="submit">Create Status</button>
-</form>
+<div class="border-container">
+  <form method="POST" action="{% url 'create_status' profile.pk %}" enctype="multipart/form-data" class="status-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="file" name="files" multiple />
+    <button type="submit">Create Status</button>
+  </form>
+</div>
 {% endblock %}

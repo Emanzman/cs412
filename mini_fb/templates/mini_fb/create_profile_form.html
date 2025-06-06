@@ -5,10 +5,13 @@
 {% block content %}
 <a href="{% url 'show_all_profiles' %}" class="button all-profiles-link">All Profiles</a>
 
-<h1>Create Your New Profile</h1>
-<form method="POST" class="profile-form">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Create Profile</button>
-</form>
+<div class="border-container">
+  <h1>Create Your New Profile</h1>
+  <form method="POST" class="profile-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="profile-button">Create Profile</button>
+  </form>
+</div>
+
 {% endblock %}

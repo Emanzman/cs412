@@ -10,6 +10,7 @@ body {
 
 p {
   color: rgb(35, 117, 204);
+  text-align: center;
 }
 
 h1 {
@@ -127,6 +128,7 @@ a {
   margin-top: 30px;
   top: 0;
   left: 2;
+
 }
 
 /* Styling for status text and buttons */
@@ -151,6 +153,7 @@ a {
 
 .profile-button {
   display: inline-block;
+  margin-bottom: 20px;
 }
 
 .cancel-button {
@@ -170,9 +173,10 @@ a {
   background-color: rgb(35, 117, 204);
   color: rgb(156, 189, 224);
   margin-bottom: 20px;
-  padding: 4px;
+  padding: 6px;
   margin-top: 30px;
   text-decoration: none;
+  display: inline-block;
 }
 
 
@@ -182,6 +186,10 @@ button {
 
 .status-submit-button {
   margin: 10px;
+}
+
+.update-profile {
+  margin-bottom: 20px;
 }
 
 /* Form styling */
@@ -197,4 +205,28 @@ form textarea {
 
 form button {
   border-radius: 8px;
+}
+
+/* Friend suggestion styling */
+
+.add-friend-button {
+  display: inline-block;
+}
+
+.friend-suggestion-container {
+  text-align: center;
+  margin-bottom: 40px;
+
+}
+
+.return-profile {
+  display: inline-block;
+  padding: 16px;
+}
+
+/* General border container styling for dark blue borders*/
+.border-container {
+  border: 4px solid rgb(32, 102, 177);
+  border-radius: 25px;
+
 }
