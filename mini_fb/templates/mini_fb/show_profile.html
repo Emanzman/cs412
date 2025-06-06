@@ -71,7 +71,9 @@
     <p>This user has no friends</p>
     {% endfor %}
 
-    <a href="{% url 'friend_suggestions' profile.pk %}" class="button">Friend Suggestions</a>
+    <!-- Links to show profile's friend suggestions and news feed-->
+    <a href="{% url 'friend_suggestions' profile.pk %}" class="button">Friend Suggestions</a><br>
+    <a href="{% url 'news_feed' profile.pk %}" class="button">News Feed</a>
   </div>
 
   {% endblock %}

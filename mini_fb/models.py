@@ -54,6 +54,12 @@ class Profile(models.Model):
       friend_suggestions = Profile.objects.exclude(pk=self.pk).exclude(pk__in=[friend.pk for friend in self.get_friends()]) # Friend suggestions that excludes the profile itself and current friends of the profile
       return friend_suggestions
 
+  def get_news_feed(self):
+    # Returns a list of status messages of the profile and their friends
+    feed_profiles = [self] + self.get_friends() # list addition
+    return StatusMessage.objects.filter(profile__in=feed_profiles).order_by('-timestamp')
+
+
 class StatusMessage(models.Model):
   # Creates a status model that represents a status that is from a specifc user profile.
   timestamp = models.DateTimeField(default=timezone.now)

@@ -192,6 +192,16 @@ button {
   margin-bottom: 20px;
 }
 
+.return-profile {
+  display: inline-block;
+  padding: 16px;
+}
+
+.return-profile-button-container {
+  text-align: center;
+  margin-top: 25px;
+}
+
 /* Form styling */
 form input {
   padding: 6px;
@@ -219,14 +229,47 @@ form button {
 
 }
 
-.return-profile {
-  display: inline-block;
-  padding: 16px;
-}
-
 /* General border container styling for dark blue borders*/
 .border-container {
   border: 4px solid rgb(32, 102, 177);
   border-radius: 25px;
 
+}
+
+/* News feed styling */
+
+.news-feed-item {
+  display: block;
+  margin-bottom: 70px;
+  border-bottom: 4px solid rgb(32, 102, 177);
+  padding: 20px 0;
+}
+
+.round-smaller-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+  margin-left: 40px;
+  float: left;
+}
+
+.news-feed-text {
+  margin-left: 140px;
+  margin-bottom: 15px;
+}
+
+.news-status-image-container {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  clear: both;
+  margin-left: 140px;
+
+}
+
+.news-status-image {
+  margin: 5px;
+  display: inline-block;
 }
