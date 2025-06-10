@@ -14,6 +14,13 @@
   </header>
   <main>
     <a href="{% url 'create_profile' %}" class="button create-profile-link">Create a New Profile</a>
+
+    {% if request.user.is_authenticated %}
+    <p>Logged in user: {{ request.user }}</p>
+    {% else %}
+    <p>Not logged in.</p>
+    {% endif %}
+
     {% block content %}
     {% endblock %}
   </main>

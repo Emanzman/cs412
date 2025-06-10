@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 # Defines the data models being used in the Mini Facebook web app
@@ -15,6 +16,8 @@ class Profile(models.Model):
   city = models.CharField(blank=False)
   email= models.EmailField(blank=False)
   profile_image_url = models.URLField(blank=False)
+  user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
   def get_status_messages(self):

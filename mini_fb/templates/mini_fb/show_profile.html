@@ -46,22 +46,25 @@
     <p>{{ status_message }}</p>
 
 
-
+    {% if request.user.is_authenticated %}
     <div class="status-button-container">
       <a href="{% url 'update_status' status_message.pk %}" class="button status-button">Update</a>
       <a href="{% url 'delete_status' status_message.pk %}" class="button status-button">Delete</a>
     </div>
+    {% endif %}
 
     {% endfor %}
     {% else %}
     <p>There are no status messages on this profile.</p>
     {% endif %}
 
+    {% if request.user.is_authenticated %}
     <!-- Link to create status and update profile-->
     <div class="profile-button-container">
       <a href="{% url 'create_status' profile.pk %}" class="button profile-button">Create a Status</a>
       <a href="{% url 'update_profile' profile.pk %}" class="button profile-button">Update Profile</a>
     </div>
+    {% endif %}
 
     <h2>{{ profile.first_name }} {{ profile.last_name }}'s Friends:</h2>
     {% for friend in profile.get_friends %}
@@ -71,9 +74,11 @@
     <p>This user has no friends</p>
     {% endfor %}
 
+    {% if request.user.is_authenticated %}
     <!-- Links to show profile's friend suggestions and news feed-->
     <a href="{% url 'friend_suggestions' profile.pk %}" class="button">Friend Suggestions</a><br>
     <a href="{% url 'news_feed' profile.pk %}" class="button">News Feed</a>
+    {% endif %}
   </div>
 
   {% endblock %}
