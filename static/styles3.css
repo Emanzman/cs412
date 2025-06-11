@@ -275,9 +275,15 @@ form button {
   display: inline-block;
 }
 
-/* Login page styling */
+/* Login and logout styling */
 
 .login {
+  text-align: center;
+  padding: 20px;
+
+}
+
+.logout {
   text-align: center;
   padding: 20px;
 }
