@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import ShowAllProfilesView, ShowProfilePageView, CreateProfileView, CreateStatusMessageView, UpdateProfileView, DeleteStatusMessageView, UpdateStatusMessageView, AddFriendView, ShowFriendSuggestionView, ShowNewsFeedView
+from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 # URL patterns for views
 
@@ -14,4 +16,8 @@ urlpatterns = [
   path('profile/<int:pk>/add_friend/<int:other_pk>', AddFriendView.as_view(), name='add_friend'), 
   path('profile/<int:pk>/friend_suggestions', ShowFriendSuggestionView.as_view(), name="friend_suggestions"),
   path('profile/<int:pk>/news_feed', ShowNewsFeedView.as_view(), name='news_feed'),
+  path('login/', auth_views.LoginView.as_view(template_name='mini_fb/login.html'), name='login'),
+  path('logout/', auth_views.LogoutView.as_view(next_page='logout_confirmation'), name='logout'),
+  path('logout_confirmation/', TemplateView.as_view(template_name='mini_fb/logged_out.html'), name='logout_confirmation'),
+
 ]
