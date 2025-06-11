@@ -40,16 +40,13 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
   def get_context_data(self):
     # Adds the profile object to the context dictionary and returns context for use in the template
     context = super().get_context_data() # Calls superclass method and gets context dicitonary.
-    pk = self.kwargs['pk'] # Gets primary key from the url
-    profile = Profile.objects.get(pk=pk) # Gets profile object using the primary key.
-    context['profile'] = profile # Adds a profile to context dictionary
+    context['profile'] = self.get_object() # Adds a profile to context dictionary
     return context
   
   def form_valid(self, form):
       
       # Associates the status message to the specific user profile
-      pk = self.kwargs['pk'] # Gets primary key from the url
-      profile = Profile.objects.get(pk=pk) # Gets profile object using the primary key.
+      profile = self.get_object() # Gets profile object using the primary key.
       form.instance.profile = profile # Associates the profile to the status message.
       
       sm = form.save() # Saves form and stores in a db
@@ -66,14 +63,14 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
   
   def get_success_url(self):
       # Returns a url that page gets redirected to after creating a new status
-      pk = self.kwargs['pk']
-      return reverse('show_profile', kwargs={'pk':pk})
+      profile = self.get_object()
+      return reverse('show_profile', kwargs={'pk': profile.pk})
   
-  #def get_login_url(self):
-   #   return reverse('login') 
+  def get_login_url(self):
+      return reverse('login') 
 
-  #def get_object(self):
-   #  return Profile.objects.get(user=self.request.user)
+  def get_object(self):
+     return Profile.objects.get(user=self.request.user)
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
@@ -82,10 +79,11 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
    template_name = 'mini_fb/update_profile_form.html'
    form_class = UpdateProfileForm
 
-   #def get_object(self):
-    #  return Profile.objects.get(user=self.request.user)
-   #def get_login_url(self):
-    #  return reverse('login') 
+   def get_object(self):
+      return Profile.objects.get(user=self.request.user)
+   
+   def get_login_url(self):
+      return reverse('login') 
 
 class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
    # A view to delete a status message
@@ -96,10 +94,10 @@ class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
    def get_success_url(self):
       # URL redirection after a deleted status message
       pk = self.object.profile.pk
-      return reverse('show_profile', kwargs={'pk':pk})
+      return reverse('show_profile', kwargs={'pk': pk})
    
-   #def get_login_url(self):
-    #  return reverse('login') 
+   def get_login_url(self):
+      return reverse('login') 
    
 class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
    # A view to update a status message through a form
@@ -111,29 +109,28 @@ class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
    def get_success_url(self):
       # URL redirection after an updated status message
       pk = self.object.profile.pk
-      return reverse('show_profile', kwargs={'pk':pk})
+      return reverse('show_profile', kwargs={'pk': pk})
    
-   #def get_login_url(self):
-    #  return reverse('login') 
+   def get_login_url(self):
+      return reverse('login') 
       
 class AddFriendView(LoginRequiredMixin, View):
    def dispatch(self, request, *args, **kwargs):
       # Creates a friendship relationship and redirects user to the profile page of the profile that added the friend.
-      p1_pk = self.kwargs['pk']
       p2_pk = self.kwargs['other_pk']
       
-      profile1 = Profile.objects.get(pk=p1_pk)
+      profile1 = Profile.objects.get(user=request.user)
       profile2 = Profile.objects.get(pk=p2_pk)
 
       profile1.add_friend(profile2)
 
-      return redirect('show_profile', pk= p1_pk)
+      return redirect('show_profile',pk=profile1.pk)
    
-  # def get_object(self):
-   #   return Profile.objects.get(user=self.request.user)
+   def get_object(self):
+      return Profile.objects.get(user=self.request.user)
 
-   #def get_login_url(self):
-    #  return reverse('login')     
+   def get_login_url(self):
+      return reverse('login')     
 
 class ShowFriendSuggestionView(LoginRequiredMixin, DetailView):
    # A view for showing the friend suggestions
@@ -141,11 +138,11 @@ class ShowFriendSuggestionView(LoginRequiredMixin, DetailView):
    template_name='mini_fb/friend_suggestions.html'
    context_object_name= 'profile'
 
-   #def get_object(self):
-    # return Profile.objects.get(user=self.request.user)
+   def get_object(self):
+     return Profile.objects.get(user=self.request.user)
 
-   #def get_login_url(self):
-    #  return reverse('login')
+   def get_login_url(self):
+      return reverse('login')
 
 
 class ShowNewsFeedView(LoginRequiredMixin, DetailView):
@@ -154,8 +151,8 @@ class ShowNewsFeedView(LoginRequiredMixin, DetailView):
    template_name= 'mini_fb/news_feed.html'
    context_object_name= 'profile'
 
-   #def get_object(self):
-    # return Profile.objects.get(user=self.request.user)
+   def get_object(self):
+     return Profile.objects.get(user=self.request.user)
 
-   #def get_login_url(self):
-    #  return reverse('login')
+   def get_login_url(self):
+      return reverse('login')

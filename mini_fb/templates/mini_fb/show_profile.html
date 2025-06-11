@@ -61,8 +61,8 @@
     {% if request.user == profile.user %}
     <!-- Link to create status and update profile-->
     <div class="profile-button-container">
-      <a href="{% url 'create_status' profile.pk %}" class="button profile-button">Create a Status</a>
-      <a href="{% url 'update_profile' profile.pk %}" class="button profile-button">Update Profile</a>
+      <a href="{% url 'create_status' %}" class="button profile-button">Create a Status</a>
+      <a href="{% url 'update_profile' %}" class="button profile-button">Update Profile</a>
     </div>
     {% endif %}
 
@@ -76,8 +76,8 @@
 
     {% if request.user == profile.user %}
     <!-- Links to show profile's friend suggestions and news feed-->
-    <a href="{% url 'friend_suggestions' profile.pk %}" class="button">Friend Suggestions</a><br>
-    <a href="{% url 'news_feed' profile.pk %}" class="button">News Feed</a>
+    <a href="{% url 'friend_suggestions' %}" class="button">Friend Suggestions</a><br>
+    <a href="{% url 'news_feed' %}" class="button">News Feed</a>
     {% endif %}
   </div>
 
