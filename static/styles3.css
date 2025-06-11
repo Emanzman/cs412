@@ -100,6 +100,7 @@ a {
 
 .profile-form {
   text-align: center;
+  padding: 10px;
 }
 
 /* Form to create a status */
@@ -272,4 +273,11 @@ form button {
 .news-status-image {
   margin: 5px;
   display: inline-block;
+}
+
+/* Login page styling */
+
+.login {
+  text-align: center;
+  padding: 20px;
 }

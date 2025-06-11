@@ -3,12 +3,15 @@
 {% extends 'mini_fb/base.html' %}
 
 {% block content %}
+
 <h1>Login to Mini Facebook</h1>
-<form action="{% url 'login' %}" method="POST">
-  {% csrf_token %}
-  {{ form }}
-  <input type="hidden" name="next" value="{% url 'show_all_profiles' %}">
-  <input type="submit" value="Login">
-</form>
+<div class="login border-container">
+  <form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="hidden" name="next" value="{% url 'show_all_profiles' %}">
+    <input type="submit" value="Login">
+  </form>
+</div>
 
 {% endblock %}
