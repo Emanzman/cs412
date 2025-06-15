@@ -1,0 +1,26 @@
+<!-- Page Listing Individual Voter Details -->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+
+<h1>{{ voter.first_name }} {{ voter.last_name}}</h1>
+<div class="voter-details-container">
+<ul>
+  <li>Address: {{voter.street_number}} {{voter.street_name}} {% if voter.apartment_number %}{{voter.apartment_number}}{% endif %}, {{ voter.zip_code }}</li>
+  <li>Date of Birth: {{voter.date_of_birth}}</li>
+  <li>Date of Registration: {{voter.date_of_registration}}</li>
+  <li>Party Affiliation: {{voter.party_affiliation}}</li>
+  <li>Precinct Number: {{voter.precinct_number}}</li>
+  <li>Voted During 2020 State: {{voter.v20state}}</li>
+  <li>Voted During 2021 Town: {{voter.v21town}}</li>
+  <li>Voted During 2021 Primary: {{voter.v21primary}}</li>
+  <li>Voted During 2022 General: {{voter.v22general}}</li>
+  <li>Voted During 2023 Town: {{voter.v23town}}</li>
+  <li>Voter Score: {{voter.voter_score}}</li>
+  <li><a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{ voter.street_number }}+{{ voter.street_name }}+{% if voter.apartment_number %}{{ voter.apartment_number }}+{% endif %}{{ voter.zip_code }}">Google Maps Address Link</a></li>
+
+</ul>
+</div>
+
+{% endblock %}

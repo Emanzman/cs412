@@ -1,0 +1,27 @@
+
+<!-- Base HTML Page for Voter Analytics Web App-->
+{% load static %}
+
+<html>
+
+<head>
+  <title>Voter Analytics</title>
+  <link rel="stylesheet" href="{% static 'styles4.css' %}">
+</head>
+
+<body>
+  <header>
+    <h1>Voter Analytics with Filters</h1>
+    <nav>
+      <ul>
+        <li><a href="{% url 'voters' %}">All Voters</a></li>
+        <li><a href="{% url 'graphs' %}">Voter Graphs</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  {% block content %}
+  {% endblock %}
+</body>
+
+</html>

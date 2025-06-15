@@ -1,0 +1,19 @@
+<!-- Page showing graph representations of voter analytics -->
+
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+
+<h1>Voter Graphs</h1>
+
+<!-- Filtering Fields -->
+{% include 'voter_analytics/filtering_form.html' %}
+
+<!-- Graphs -->
+<div class="graph-container">{{ birth_year_histogram|safe }}</div>
+
+<div class="graph-container">{{ party_affiliation_pie_chart|safe }}</div>
+
+<div class="graph-container">{{ election_participation_histogram |safe }}</div>
+
+{% endblock %}

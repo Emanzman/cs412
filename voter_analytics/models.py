@@ -5,6 +5,7 @@ from datetime import datetime
 
 # Create your models here.
 
+# Voter model representing one voter and their information
 class Voter(models.Model):
   last_name = models.CharField()
   first_name = models.CharField()
@@ -25,17 +26,19 @@ class Voter(models.Model):
   voter_score = models.IntegerField()
 
   def __str__(self):
+    # String representation of voter
     return f'{self.first_name} {self.last_name} {self.street_number} {self.street_name} {self.apartment_number} {self.zip_code} {self.date_of_birth} {self.party_affiliation}'
   
 
 def load_data():
   filename = '/Users/emmanueleyob/Desktop/django/newton_voters.csv'
   f = open(filename)
-  f.readline()
+  f.readline() # Skips the header line
 
   for line in f:
     fields = line.strip().split(',')
     try:
+      # Creates a voter instance using data rom CSV
       voter = Voter(
         last_name = fields[1],
         first_name = fields[2],
@@ -48,6 +51,7 @@ def load_data():
         party_affiliation = fields[9],
         precinct_number = fields[10],
 
+        # Sets election participation values from string to Boolean values
         v20state = (fields[11].strip() == 'TRUE'),
         v21town = (fields[12].strip() == 'TRUE'),
         v21primary = (fields[13].strip() == 'TRUE'),
@@ -56,11 +60,11 @@ def load_data():
         voter_score = fields[16],
 
       )
-      voter.save()
+      voter.save() # Save to database
 
     except Exception as exception:
-      print(f'Skipped:{fields} because: {exception}')
+      print(f'Skipped:{fields} because: {exception}') # Exception with exception message
 
-  print(f'Done. Created {len(Voter.objects.all())} Results.')
+  print(f'Done. Created {len(Voter.objects.all())} Results.') # Displays how many voters created
 
   
