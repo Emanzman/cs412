@@ -1,0 +1,14 @@
+<!-- Page Dsiplaying Detail of a Single Trivia Attempt of the Ethiopian Trivia Web App-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h1>Ethiopian Trivia Attempt Details:</h1>
+<ul>
+  <li>User: {{ attempt.user.username }}</li>
+  <li>Category: {{ attempt.category }}</li>
+  <li>Score: {{ attempt.score }}</li>
+  <li>Date: {{ attempt.attempt_date }}</li>
+</ul>
+{% endblock %}

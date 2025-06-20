@@ -1,0 +1,18 @@
+<!-- Page to Create a Profile for the Ethiopian Trivia App -->
+
+{% extends "project/base.html" %}
+
+{% block content %}
+
+<h1>Create a Profile</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {{ profile_form.as_p }}
+  <button type="submit">Create Profile</button>
+</form>
+
+
+
+{% endblock %}

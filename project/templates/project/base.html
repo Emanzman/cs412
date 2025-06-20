@@ -1,0 +1,34 @@
+<!-- Base html file for Ethiopian Trivia Web App-->
+
+<html>
+  <head>
+    <title>Ethiopian Trivia App</title>
+  </head>
+  <body>
+    <h1>Ethiopian Trivia App</h1>
+    <nav>
+      <a href="{% url 'category_selection' %}">Home</a>
+
+      {% if user.is_authenticated and user.is_staff %}
+      <a href="{% url 'question_list' %}">All Questions</a>
+      <a href="{% url 'create_question' %}">Create Question</a>
+      {% endif %}
+
+      <a href="{% url 'attempt_list' %}">Trivia Attempts</a>
+
+      {% if user.is_authenticated and user.project_profile %}
+      <a href="{% url 'show_profile' user.project_profile.pk %}">Profile</a>
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+      
+      {% else %}
+      <a href="{% url 'login' %}">Login</a>
+      <a href="{% url 'create_profile' %}">Create Profile</a>
+      {% endif %}
+    </nav>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

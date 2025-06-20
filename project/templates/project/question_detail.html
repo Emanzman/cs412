@@ -1,0 +1,24 @@
+<!-- Page Dsiplaying Detail of a Single Question from the Ethiopian Trivia Web App-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h1>Question Information</h1>
+<p>{{ question.question_text }}</p>
+
+{% if question.image %}
+    <img src="{{ question.image.url }}">
+{% endif %}
+
+<h2> Multiple Choice</h2>
+<ul>
+  {% for choice in question.choices.all %}
+    <li>{{ choice.choice_text }} {% if choice.correct_choice %}(Correct){% endif %}</li>
+  {% endfor %}
+</ul>
+
+<p>Category: {{ question.get_category_display }}</p>
+<p>Created by: {{ question.question_creator }}</p>
+
+{% endblock %}

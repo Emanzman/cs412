@@ -1,0 +1,16 @@
+<!-- Page to Create Trivia Questions for Ethiopian Trivia Web App-->
+<!-- Accessible only to staff users -->
+
+{% extends 'project/base.html' %}
+{% block content %}
+
+<h1>Create a Question</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Create Question</button>
+</form>
+
+
+{% endblock %}

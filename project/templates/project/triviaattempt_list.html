@@ -1,0 +1,17 @@
+<!-- Page Dsiplaying List of all Trivia Attempts of the Ethiopian Trivia Web App-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h1>Ethiopian Trivia Attempts</h1>
+<ul>
+  {% for attempt in attempts %}
+  <li>
+    <a href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.user.username }} | {{ attempt.category }} | {{attempt.score}}</a>
+  </li>
+  {% empty %}
+  <li>No trivia attempts yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

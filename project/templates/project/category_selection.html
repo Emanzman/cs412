@@ -1,0 +1,12 @@
+<!-- Homepage for Ethiopian Trivia Web App -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Pick an Ethiopian Trivia Category</h2>
+<ul>
+    {% for val, category_label in categories %}
+        <li><a href="{% url 'category_questions' val %}">{{ category_label }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

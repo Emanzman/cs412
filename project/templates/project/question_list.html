@@ -1,0 +1,15 @@
+<!-- Page With a List of All Questions from the Ethiopian Trivia Web App-->
+<!-- Accessible only to staff users -->
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h1>All Questions</h1>
+<ul>
+  {% for question in questions %}
+  <li><a href="{% url 'question_detail' question.pk %}">{{ question.question_text }}</a></li>
+  {% empty %}
+  <li>No questions yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
