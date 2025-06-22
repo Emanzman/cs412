@@ -27,10 +27,7 @@ class TriviaAttemptForm(forms.ModelForm):
         fields = ['category', 'score']
 
 # Form to create a trivia question with question text, category, choices, and an optional image
-class QuestionCreationForm(forms.Form):
-    question_text = forms.CharField(label='Question', widget=forms.Textarea)
-    category = forms.ChoiceField(choices=Question.category_choices)
-    image = forms.ImageField(required=False)
+class QuestionCreationForm(forms.ModelForm):
 
     # Fields to enter 4 choices for the question
     choice1 = forms.CharField(label='Choice 1')
@@ -44,3 +41,17 @@ class QuestionCreationForm(forms.Form):
         choices=[('1', 'Choice 1'), ('2', 'Choice 2'), ('3', 'Choice 3'), ('4', 'Choice 4')],
         widget=forms.RadioSelect
     )
+    class Meta:
+        model = Question
+        fields = ['question_text', 'category', 'image']
+
+# From used for category dropdown on leaderboard page
+class CategoryFilterForm(forms.Form):
+    all_categories = 'all'
+    category = forms.ChoiceField(choices=[('', 'Choose a category'), (all_categories, 'All Categories'),] + list(Question.category_choices), required=True)
+
+# From uses for editting a question
+class QuestionEditForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = ['question_text', 'category', 'image']

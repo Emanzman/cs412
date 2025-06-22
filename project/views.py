@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
-from .models import Question, TriviaAttempt, Profile, QuestionChoice
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
+from .models import Question, TriviaAttempt, Profile, QuestionChoice, QuestionAnswer
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth import login
-from .forms import UserRegisterForm, ProfileForm, QuestionCreationForm
+from .forms import UserRegisterForm, ProfileForm, QuestionCreationForm, CategoryFilterForm, QuestionEditForm
 from django.views import View
+from django.utils import timezone
+from django.views.generic.edit import FormView
+from django.urls import reverse
 
 # Views page for Ethiopian Trivia App.
 # Create your views here.
@@ -113,49 +116,154 @@ class ShowProfilePageView(LoginRequiredMixin, DetailView):
     template_name = 'project/profile.html'
     context_object_name = 'profile'
 
-# View that lets staff users create trivia questions with choices and other question information
-class QuestionCreateView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['trivia_attempts'] = TriviaAttempt.objects.filter(user=self.object.user).order_by('-attempt_date')
+        return context
+    
+# View that lets staff users create questions
+class QuestionCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Question
+    form_class = QuestionCreationForm
     template_name = 'project/question_creation.html'
 
+    
     def test_func(self):
-        # Restricts access to page to staff users only
+        # Checks if logged in user is staff
         return self.request.user.is_staff
 
+    def form_valid(self, form):
+        question = form.save(commit=False) # Creates a question object from form data but doesn't save yet
+        question.question_creator = self.request.user # Assigns logged in user as quesetion creator
+        question.save() # Saves question to db with question creator added
 
-    def get(self, request):
-        # Renders question creation form that is empty
-        form = QuestionCreationForm()
-        return render(request, self.template_name, {'form': form})
+        # Gets question choices from form and creates the 4 choices
+        choices = [
+            form.cleaned_data['choice1'],
+            form.cleaned_data['choice2'],
+            form.cleaned_data['choice3'],
+            form.cleaned_data['choice4'],
+        ]
+        correct_ind = int(form.cleaned_data['correct_choice']) - 1 # correct choice index
 
-    def post(self, request):
-        # Proceses question creation form
-        form = QuestionCreationForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            # Creates question object
-            question = Question.objects.create(
-                question_text=form.cleaned_data['question_text'],
-                category=form.cleaned_data['category'],
-                image=form.cleaned_data.get('image'),
-                question_creator=request.user
+        # Loop and save each question choice
+        for i, c_text in enumerate(choices):
+            QuestionChoice.objects.create(
+                question=question,
+                choice_text=c_text,
+                correct_choice=(i == correct_ind)
             )
-            # Gets question choices from form and creates the 4 choices
-            choices = [
-                form.cleaned_data['choice1'],
-                form.cleaned_data['choice2'],
-                form.cleaned_data['choice3'],
-                form.cleaned_data['choice4'],
-            ]
-            correct_ind = int(form.cleaned_data['correct_choice']) - 1 # Index of correct choice
+        return super().form_valid(form)
 
-            # Loop and save each question choice
-            for i, c_text in enumerate(choices):
-                QuestionChoice.objects.create(
+    def get_success_url(self):
+        return reverse('question_detail', kwargs={'pk': self.object.pk}) # Redirects user to question detail page of the created question
+
+# View that handles the displaying of trivia questions as well as processing submission
+class TriviaAttemptView(LoginRequiredMixin, View):
+    template_name = 'project/trivia_attempt.html'
+
+
+    def get(self, request, category):
+        # Get request to display trivia questions based on selected category
+        questions = Question.objects.filter(category=category) # Gets all the questions in a category 
+        return render(request, self.template_name, {
+            'category': category,
+            'questions': questions,
+        }) # Passes category and questions to the template
+    
+    def post(self, request, category):
+        # Post request for when the user submits their trivia attempt
+        questions = Question.objects.filter(category=category)
+        score = 0 # Initialized score
+
+        trivia_attempt = TriviaAttempt.objects.create(
+            user=request.user,
+            category=category,
+            score=0,
+            attempt_date=timezone.now() 
+        ) # Trivia attempt object with initial score value 0
+
+        # Iteration through all of the questions to process the user's answers
+        for question in questions:
+            chosen_choice_id = request.POST.get(f'question_{question.id}') # Extracts user's chosen answer
+            if chosen_choice_id: # if a choice was selected by the user
+                chosen_choice = QuestionChoice.objects.get(id=chosen_choice_id) # Get the choice
+                QuestionAnswer.objects.create(
+                    trivia_attempt=trivia_attempt,
                     question=question,
-                    choice_text=c_text,
-                    correct_choice=(i == correct_ind)
-                )
+                    user_choice=chosen_choice,
+                    ) # Creates a QuestionAnswer object for user's answer
+                if chosen_choice.correct_choice:
+                    score += 5 # Add 5 points to score if user made the correct choice
 
-            return redirect('question_detail', pk=question.pk) # Redirects user to question detail page of the created question
+        # After looping through questions, this saves the final score to the trivia attempt
+        trivia_attempt.score = score
+        trivia_attempt.save()
 
-        return render(request, self.template_name, {'form': form}) # If form is invalid, re-render the form
+        return redirect('attempt_detail', pk=trivia_attempt.pk) # Redirect user to the attempt detail page showing their attempt
+
+# View for displaying the leaderboards of best trivia scores
+class TriviaLeaderboardView(FormView):
+    template_name = 'project/trivia_leaderboard.html'
+    form_class = CategoryFilterForm
+
+    def form_valid(self, form):
+        chosen_category = form.cleaned_data['category']
+
+        if chosen_category == CategoryFilterForm.all_categories: # If user selects all categories, display leaderboard for all categories combined
+            best_attempts = TriviaAttempt.objects.order_by('-score')[:10]
+
+        else:
+            best_attempts = TriviaAttempt.objects.filter(category=chosen_category).order_by('-score')[:10] # View leaderboards for specific categories
+
+        context = self.get_context_data(
+            form=form,
+            chosen_category=chosen_category,
+            best_attempts=best_attempts,
+        )
+        
+        return render(self.request, self.template_name, context) # Render a template with updated context
+
+# View for editing a question only accessible to staff users
+class QuestionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Question
+    form_class = QuestionEditForm
+    template_name = 'project/edit_question.html'
+    context_object_name = 'question'
+
+    # Only accessible to staff users
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    # Add choices to the context to be able to render and edit in template
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['choices'] = self.object.choices.all()
+        return context
+    
+    # When form is submitted and valid
+    def form_valid(self, form):
+        question = self.object # Question being edited
+        choices = question.choices.all() # Choices being editted
+
+        # Loops through choices to be able to update its text and if it's the correct choice
+        for choice in choices:
+            choice_text = self.request.POST.get(f'choice_{choice.id}')
+            choice_is_correct = self.request.POST.get('correct_choice') == str(choice.id)
+            if choice_text:
+                choice.choice_text = choice_text
+                choice.correct_choice = choice_is_correct
+                choice.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('question_detail', kwargs={'pk': self.object.pk}) # Directs user to the question detail page upon a successful question update
+
+
+    
+
+
+
+
+

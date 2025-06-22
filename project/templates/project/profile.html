@@ -15,4 +15,16 @@
 <p>User has no profile picture</p>
 {% endif %}
 
+<h3>Trivia Attempts:</h3>
+<ul>
+  {% for attempt in trivia_attempts %}
+    <li>
+      <a href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.category|title }} | Score: {{ attempt.score }}</a>
+    </li>
+  {% empty %}
+
+  <li>User has no trivia attempts</li>
+  {% endfor %}
+</ul>
+
 {% endblock %}

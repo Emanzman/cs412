@@ -1,0 +1,31 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h1> Trivia Attempt | Category: {{ category|title }}</h1>
+
+<form method="post">
+  {% csrf_token %}
+  {% for question in questions %}
+  <div class="trivia-attempt">
+  <div class="trivia-attempt-question">
+    {% if question.image %}
+      <img src="{{ question.image.url }}">
+    {% endif %}
+    <h2>{{ forloop.counter}}. {{ question.question_text }}</h2>
+  </div>
+
+  {% for choice in question.choices.all %}
+  <div class="trivia=attempt-choice">
+    <label>
+      <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}">
+      {{ choice.choice_text }}
+    </label>
+  </div>
+  {% endfor %}
+  </div>
+  {% endfor %}
+  <button type="submit">Finish Trivia</button>
+</form>
+
+{% endblock %}

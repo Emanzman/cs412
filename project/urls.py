@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import QuestionListView, QuestionDetailView, TriviaAttemptListView, TriviaAttemptDetailView, CategorySelectionView, QuestionCategoryListView, ShowProfilePageView, CreateProfileView, RedirectToProfileView, QuestionCreateView
+from .views import QuestionListView, QuestionDetailView, TriviaAttemptListView, TriviaAttemptDetailView, CategorySelectionView, QuestionCategoryListView, ShowProfilePageView, CreateProfileView, RedirectToProfileView, QuestionCreateView, TriviaAttemptView, TriviaLeaderboardView, QuestionEditView
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
@@ -17,6 +17,9 @@ urlpatterns = [
     path('create_profile/', CreateProfileView.as_view(), name='create_profile'),
     path('redirect/', RedirectToProfileView.as_view(), name='redirect_to_profile'),
     path('questions/create/', QuestionCreateView.as_view(), name='create_question'),
+    path('trivia_attempt/<str:category>/', TriviaAttemptView.as_view(), name='trivia_attempt'),
+    path('trivia_leaderboard/', TriviaLeaderboardView.as_view(), name='trivia_leaderboard'),
+    path('questions/<int:pk>/edit/', QuestionEditView.as_view(), name='edit_question'),
 
 ]
 
