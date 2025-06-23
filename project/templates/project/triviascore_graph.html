@@ -1,0 +1,11 @@
+<!-- Page Displaying the Graph of User Score History Based on Category-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+  <h1>{{ request.user.username }}'s Trivia Score Graph for Category: {{ category|title }}</h1>
+  <div>
+    {{ score_graph|safe }}
+  </div>
+  <a href="{% url 'show_profile' request.user.project_profile.pk %}">Return to Profile</a>
+  {% endblock %}

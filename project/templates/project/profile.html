@@ -10,9 +10,18 @@
 <p>Email: {{ profile.user.email }}</p>
 
 {% if profile.image %}
-<img src="{{ profile.image.url }}">
+  <img src="{{ profile.image.url }}">
 {% else %}
-<p>User has no profile picture</p>
+  <p>User has no profile picture</p>
+{% endif %}
+
+{% if badges %}
+  <h3>Badges Earned:</h3>
+  <ul>
+    {% for badge in badges %}
+      <li>{{ badge }}</li>
+    {% endfor %}
+  </ul>
 {% endif %}
 
 <h3>Trivia Attempts:</h3>
@@ -26,5 +35,40 @@
   <li>User has no trivia attempts</li>
   {% endfor %}
 </ul>
+
+{% if player_trivia_stats %}
+
+  <h3>Player Trivia Stats:</h3>
+  <ul>
+    <li>Total Trivia Attempts: {{ player_trivia_stats.total_attempts }}</li>
+    <li>Average Score for All Trivia Attempts: {{ player_trivia_stats.avg_score }}</li>
+    <li>Highest Score: {{ player_trivia_stats.highest_score }}</li>
+    <li>Lowest Score: {{ player_trivia_stats.lowest_score }}</li>
+    <li>Most Attempted Category: {{ player_trivia_stats.most_attempted_category|title }}</li>
+    <li>Number of Attempted Categories: {{ player_trivia_stats.number_categories }}</li>
+  </ul>
+
+  <h3>Average Score based on Category:</h3>
+  <ul>
+    {% for category, avg_val in player_trivia_stats.category_averages.items %}
+      <li>{{ category|title }}: {{ avg_val }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+{% if categories_attempted %}
+  <h3>Trivia Score Graph Analysis:</h3>
+  <ul>
+    {% for category in categories_attempted %}
+      <li>
+        <a href="{% url 'triviascore_graph' category %}">{{ category|title }} Trivia Score Graph</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+
+
 
 {% endblock %}

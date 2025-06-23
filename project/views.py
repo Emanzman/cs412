@@ -9,6 +9,12 @@ from django.views import View
 from django.utils import timezone
 from django.views.generic.edit import FormView
 from django.urls import reverse
+from plotly.offline import plot
+import plotly.graph_objs as go
+import random
+from collections import Counter
+from django.db.models import Avg, Max, Min
+
 
 # Views page for Ethiopian Trivia App.
 # Create your views here.
@@ -64,6 +70,27 @@ class TriviaAttemptDetailView(DetailView):
     template_name = 'project/triviaattempt_detail.html'
     context_object_name = 'attempt'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # List of Ethiopian fun facts
+        ethiopian_fun_facts = [
+            "Ethiopa is the only African country that was never colonized.",
+            "Coffee was discovered in Ethiopia.",
+            "Ethiopia has 13 months in its calendar.",
+            "Ethiopia has its own script called Ge'ez.",
+            "Addis Ababa has the highest altitude capital city in Africa.",
+            "The African Union is headquartered in Addis Ababa, Ethiopia.",
+            "The Ethiopian calendar is 7-8 years behind the Gregorian calendar.",
+            "The Blue Nile River starts in Ethiopia.",
+            "Axum is a city in Ethiopia that is believed to hold the Ark of the Covenant.",
+            "Ethiopia is the birthplace of the oldest human ancestor Lucy.",
+            "The Danakil Depression found in Ethiopia is one of the hottest places on Earth.",
+        ]
+
+        context['fun_fact'] = random.choice(ethiopian_fun_facts) # Randomly choose a fact to be displayed
+        return context
+
 # View that handles user registration and profile creation together
 class CreateProfileView(CreateView):   
     template_name = 'project/create_profile_form.html'
@@ -118,16 +145,82 @@ class ShowProfilePageView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['trivia_attempts'] = TriviaAttempt.objects.filter(user=self.object.user).order_by('-attempt_date')
+
+        # Gets all trivia attempts from a user ordered by latest to oldest
+        attempts = TriviaAttempt.objects.filter(user=self.object.user).order_by('-attempt_date')
+        context['trivia_attempts'] = attempts
+
+        # Stores list of different categories attempted by a user
+        categories_attempted = []
+        for attempt in attempts:
+            if attempt.category not in categories_attempted:
+                categories_attempted.append(attempt.category)
+        context['categories_attempted'] = categories_attempted
+        
+        badges = []
+
+        # Perfectionist badge if user ever scored 100
+        if attempts.filter(score=100).exists():
+            badges.append("Perfectionist | Scored 100 on a trivia attempt")
+
+        # Dedicated badge if user attempted trivia 5 or more times
+        if attempts.count() >= 5:
+            badges.append("Dedicated | Completed 5+ trivia attempts")
+
+        # Veteran badge if user attempted 10 or more trvia games
+        if attempts.count() >= 10:
+            badges.append("Veteran | Completed 10+ trivia attempts")
+
+        # Versatile badge if user attempted 3 or more different categories
+        if len(categories_attempted) >= 3:
+            badges.append("Versatile | Attempted 3+ different categories")
+
+        # Improver badge if latest score is higher than initial score
+        if attempts.count() >= 2:
+            latest_score = attempts.first().score 
+            earliest_score = attempts.last().score
+            if latest_score > earliest_score:
+                badges.append("Improver | Improved score from first to lastest score")
+    
+        context['badges'] = badges
+
+        # Trivia stats for players
+        total_attempts = attempts.count() # Total number of trivia attempts
+        avg_score = attempts.aggregate(Avg('score'))['score__avg'] or 0 # Average score of trivia attemmpts
+        highest_score = attempts.aggregate(Max('score'))['score__max'] or 0 # Highest trivia score across every category
+        lowest_score = attempts.aggregate(Min('score'))['score__min'] or 0 # Lowest trivia score across every category
+
+        # Category that is most attempted
+        category_ctr = Counter(attempt.category for attempt in attempts)
+        most_attempted_category = category_ctr.most_common(1)[0][0] if category_ctr else None
+
+        number_categories = len(categories_attempted) # Number of attempted categories
+
+        # Average score based on category
+        category_averages = {}
+        for category in categories_attempted:
+            avg = TriviaAttempt.objects.filter(user=self.object.user, category=category).aggregate(Avg('score'))['score__avg'] or 0
+            category_averages[category] = round(avg, 2)
+
+        context['player_trivia_stats'] = {
+            'total_attempts': total_attempts,
+            'avg_score': round(avg_score, 2),
+            'highest_score': highest_score,
+            'lowest_score': lowest_score,
+            'most_attempted_category': most_attempted_category,
+            'number_categories': number_categories,
+            'category_averages': category_averages,
+        }
+
         return context
     
+       
 # View that lets staff users create questions
 class QuestionCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Question
     form_class = QuestionCreationForm
     template_name = 'project/question_creation.html'
 
-    
     def test_func(self):
         # Checks if logged in user is staff
         return self.request.user.is_staff
@@ -161,7 +254,6 @@ class QuestionCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 # View that handles the displaying of trivia questions as well as processing submission
 class TriviaAttemptView(LoginRequiredMixin, View):
     template_name = 'project/trivia_attempt.html'
-
 
     def get(self, request, category):
         # Get request to display trivia questions based on selected category
@@ -260,10 +352,36 @@ class QuestionEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse('question_detail', kwargs={'pk': self.object.pk}) # Directs user to the question detail page upon a successful question update
 
+# View displaying a line graph of a user's trivia score history 
+class TriviaScoreGraphView(LoginRequiredMixin, ListView):
+    model = TriviaAttempt
+    template_name = 'project/triviascore_graph.html'
+    context_object_name = 'attempts'
 
-    
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return TriviaAttempt.objects.filter(user=self.request.user, category=category).order_by('attempt_date') # Filters trivia attempts by user and category which are ordered by date
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        attempts = context['attempts']
+        category = self.kwargs['category'] 
+
+        dates = [attempt.attempt_date.strftime('%B %d, %Y') for attempt in attempts] # Formatted attempt dates used for x-axis of graph
+        scores = [attempt.score for attempt in attempts] #  Attempt scores used for y-axis of graph
+
+        triviascore_line = go.Scatter(x=dates, y=scores, mode='lines+markers', name='Trivia Score') # Creates plotly line graph
+        layout = go.Layout(
+            title=f'Trivia Score History for {category.title()}',
+            xaxis=dict(title='Date'),
+            yaxis=dict(title='Score'),
+        ) # Adds title, x-axis, and y-axis labels
+        figure = go.Figure(data=[triviascore_line], layout=layout) # Combines data and layout to create a figure
+        context['score_graph'] = plot(figure, output_type='div') # Converts Plotly figure to HTML div to use in template
+        context['category'] = category 
+
+        return context
 
 
 

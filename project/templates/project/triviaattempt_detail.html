@@ -11,4 +11,28 @@
   <li>Score: {{ attempt.score }}</li>
   <li>Date: {{ attempt.attempt_date }}</li>
 </ul>
+
+
+<h2>Question Explanations:</h2>
+
+{% for answer in attempt.questionanswer_set.all %}
+<p>Question {{ forloop.counter }}: {{ answer.question.question_text }}</p>
+
+<p>Your Answer: {{ answer.user_choice.choice_text }}</p>
+  {% if answer.user_choice.correct_choice %}
+    <p>(Correct)</p>
+  {% else %}
+    <p>(Incorrect)</p>
+    <p>Correct Answer:</p>
+    {% for choice in answer.question.choices.all %}
+      {% if choice.correct_choice %}
+        {{ choice.choice_text }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+
+<h2>Fun Fact About Ethiopia:</h2>
+<p>{{ fun_fact }}</p>
+
 {% endblock %}
