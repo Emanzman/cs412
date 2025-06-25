@@ -1,3 +1,7 @@
+/* Emmanuel Eyob*/
+
+/* Styling for Ethiopian Trivia App */
+
 /* Body styling */
 body {
   background-color: rgb(212, 243, 212);
@@ -60,6 +64,7 @@ nav a:hover, nav button:hover {
   border-radius: 4px;
 }
 
+/* h1, h2, h3 tag styling */
 h1, h2, h3 {
   color: rgb(23, 137, 78);
 }
