@@ -1,17 +1,19 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
 <!-- Page Dsiplaying List of all Trivia Attempts of the Ethiopian Trivia Web App-->
 
 {% extends 'project/base.html' %}
 
 {% block content %}
-
-<h1>Ethiopian Trivia Attempts</h1>
-<ul>
-  {% for attempt in attempts %}
-  <li>
-    <a href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.user.username }} | {{ attempt.category }} | {{attempt.score}}</a>
-  </li>
-  {% empty %}
-  <li>No trivia attempts yet.</li>
-  {% endfor %}
-</ul>
+<div class="list-container">
+  <h1>Ethiopian Trivia Attempts</h1>
+  <ul>
+    {% for attempt in attempts %}
+    <li>
+      <a class="trivia-attempt-link" href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.user.username }} | {{ attempt.category }} | {{attempt.score}}</a><br><br>
+    </li>
+    {% empty %}
+    <li>No trivia attempts yet.</li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

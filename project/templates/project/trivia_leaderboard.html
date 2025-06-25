@@ -1,47 +1,49 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
 <!-- Page for the Trivia Leaderboard with Leadeboard Category Selection-->
-
+<!-- Leaderboards for all categories as well as an overall leaderboard table-->
 
 {% extends "project/base.html" %}
 
 {% block content %}
+<div class="content-container">
+  <h1>Trivia Leaderboard</h1>
 
-<h1>Trivia Leaderboard</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">View</button>
+  </form>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">View</button>
-</form>
+  {% if best_attempts %}
+  <h2>Best Scores | {{ chosen_category|title }}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>User</th>
+        <th>Category</th>
+        <th>Attempt Date</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for attempt in best_attempts %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>
+          <a href="{% url 'show_profile' attempt.user.project_profile.pk %}">
+            {{ attempt.user.username }}
+          </a>
+        </td>
+        <td>{{ attempt.category|title }}</td>
+        <td>{{ attempt.attempt_date|date:"M d, Y g:ia" }}</td>
+        <td>{{ attempt.score }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-{% if best_attempts %}
-<h2>Best Scores | {{ selected_category|title }}</h2>
-<table>
-  <thead>
-    <tr>
-      <th>Rank</th>
-      <th>User</th>
-      <th>Category</th>
-      <th>Attempt Date</th>
-      <th>Score</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for attempt in best_attempts %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>
-        <a href="{% url 'show_profile' attempt.user.project_profile.pk %}">
-          {{ attempt.user.username }}
-        </a>
-      </td>
-      <td>{{ attempt.category|title }}</td>
-      <td>{{ attempt.attempt_date|date:"M d, Y g:ia" }}</td>
-      <td>{{ attempt.score }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-{% endif %}
+  {% endif %}
+</div>
 {% endblock %}
 

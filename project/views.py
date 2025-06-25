@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView, FormView, DeleteView
 from .models import Question, TriviaAttempt, Profile, QuestionChoice, QuestionAnswer
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -7,15 +7,13 @@ from django.contrib.auth import login
 from .forms import UserRegisterForm, ProfileForm, QuestionCreationForm, CategoryFilterForm, QuestionEditForm
 from django.views import View
 from django.utils import timezone
-from django.views.generic.edit import FormView
 from django.urls import reverse
 from plotly.offline import plot
 import plotly.graph_objs as go
-import random
 from collections import Counter
 from django.db.models import Avg, Max, Min
 
-
+# Emmanuel Eyob emanzman@bu.edu
 # Views page for Ethiopian Trivia App.
 # Create your views here.
 
@@ -72,23 +70,6 @@ class TriviaAttemptDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # List of Ethiopian fun facts
-        ethiopian_fun_facts = [
-            "Ethiopa is the only African country that was never colonized.",
-            "Coffee was discovered in Ethiopia.",
-            "Ethiopia has 13 months in its calendar.",
-            "Ethiopia has its own script called Ge'ez.",
-            "Addis Ababa has the highest altitude capital city in Africa.",
-            "The African Union is headquartered in Addis Ababa, Ethiopia.",
-            "The Ethiopian calendar is 7-8 years behind the Gregorian calendar.",
-            "The Blue Nile River starts in Ethiopia.",
-            "Axum is a city in Ethiopia that is believed to hold the Ark of the Covenant.",
-            "Ethiopia is the birthplace of the oldest human ancestor Lucy.",
-            "The Danakil Depression found in Ethiopia is one of the hottest places on Earth.",
-        ]
-
-        context['fun_fact'] = random.choice(ethiopian_fun_facts) # Randomly choose a fact to be displayed
         return context
 
 # View that handles user registration and profile creation together
@@ -202,6 +183,28 @@ class ShowProfilePageView(LoginRequiredMixin, DetailView):
             avg = TriviaAttempt.objects.filter(user=self.object.user, category=category).aggregate(Avg('score'))['score__avg'] or 0
             category_averages[category] = round(avg, 2)
 
+        if category_averages:
+
+            # Radar Graph
+            figure = go.Figure(
+                data=go.Scatterpolar(
+                    r=list(category_averages.values()),
+                    theta=list(category_averages.keys()),
+                    fill='toself'
+                )
+            )
+            context['radar_div'] = plot(figure, output_type='div')
+
+            # Bar Graph
+            bar_figure = go.Figure(
+                data=go.Bar(
+                    x=list(category_averages.keys()),
+                    y=list(category_averages.values()),
+                )
+            )
+            context['bar_div'] = plot(bar_figure, output_type='div')
+
+
         context['player_trivia_stats'] = {
             'total_attempts': total_attempts,
             'avg_score': round(avg_score, 2),
@@ -212,6 +215,7 @@ class ShowProfilePageView(LoginRequiredMixin, DetailView):
             'category_averages': category_averages,
         }
 
+        
         return context
     
        
@@ -360,7 +364,10 @@ class TriviaScoreGraphView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         category = self.kwargs['category']
-        return TriviaAttempt.objects.filter(user=self.request.user, category=category).order_by('attempt_date') # Filters trivia attempts by user and category which are ordered by date
+        profile_pk = self.kwargs['profile_pk']
+        self.profile = Profile.objects.get(pk=profile_pk)
+        self.viewed_user = self.profile.user
+        return TriviaAttempt.objects.filter(user=self.viewed_user, category=category).order_by('attempt_date') # Filters trivia attempts by user and category which are ordered by date
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -368,7 +375,7 @@ class TriviaScoreGraphView(LoginRequiredMixin, ListView):
         attempts = context['attempts']
         category = self.kwargs['category'] 
 
-        dates = [attempt.attempt_date.strftime('%B %d, %Y') for attempt in attempts] # Formatted attempt dates used for x-axis of graph
+        dates = [attempt.attempt_date.strftime('%B %d, %Y %I:%M %p') for attempt in attempts] # Formatted attempt dates used for x-axis of graph
         scores = [attempt.score for attempt in attempts] #  Attempt scores used for y-axis of graph
 
         triviascore_line = go.Scatter(x=dates, y=scores, mode='lines+markers', name='Trivia Score') # Creates plotly line graph
@@ -380,8 +387,22 @@ class TriviaScoreGraphView(LoginRequiredMixin, ListView):
         figure = go.Figure(data=[triviascore_line], layout=layout) # Combines data and layout to create a figure
         context['score_graph'] = plot(figure, output_type='div') # Converts Plotly figure to HTML div to use in template
         context['category'] = category 
+        context['profile'] = self.viewed_user.project_profile
 
         return context
 
+# View for staff users to delete questions 
+class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Question
+    template_name = 'project/delete_confirmation.html'
+    context_object_name = 'question'
 
+    def test_func(self):
+        return self.request.user.is_staff
 
+    def get_success_url(self):
+        return reverse('question_list')
+    
+# View for displaying the homepage
+class HomePageView(TemplateView):
+    template_name= "project/home.html"

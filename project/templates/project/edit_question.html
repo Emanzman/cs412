@@ -1,21 +1,24 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
 <!-- Page to Edit a Question for Ethiopian Trivia Web App-->
-
 
 {% extends 'project/base.html' %}
 
 {% block content %}
+<div class="form-container">
+  <h1>Edit Question</h1>
 
-<h1>Edit Question</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
 
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.as_p }}
-
-  {% for choice in choices %}
-    <label>Choice {{ forloop.counter }}</label>
-    <input type="text" name="choice_{{ choice.id }}" value="{{ choice.choice_text }}">
-    <input type="radio" name="correct_choice" value="{{ choice.id }}" {% if choice.correct_choice %}checked{% endif %}> Correct<br>
-  {% endfor %}
-  <button type="submit">Save</button>
-</form>
+    {% for choice in choices %}
+    <div class="choice-row">
+      <label>Choice {{ forloop.counter }}</label>
+      <input class="edit-question-choice-input"type="text" name="choice_{{ choice.id }}" value="{{ choice.choice_text }}">
+      <input type="radio" name="correct_choice" value="{{ choice.id }}" {% if choice.correct_choice %}checked{% endif %}> Correct<br>
+    </div>
+    {% endfor %}
+    <button type="submit">Save</button>
+  </form>
+</div>
 {% endblock %}

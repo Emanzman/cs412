@@ -1,74 +1,79 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
 <!-- Profile Page for Ethiopian Trivia Web App-->
+<!-- This page shows general user information, badges, trivia attempts, trivia stats, and graph representation of their stats-->
 
 {% extends 'project/base.html' %}
 
 {% block content %}
+<div class="content-container">
+  <h1>{{ profile.user.username }}'s Profile Page</h1>
+  <div class="full-profile-info">
+    {% if profile.image %}
+      <img src="{{ profile.image.url }}" class="profile-image">
+    {% endif %}
+    <div class="profile-info">
+      <p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
+      <p>Email: {{ profile.user.email }}</p>
+    </div>
+  </div>
 
-<h1>{{ profile.user.username }}'s Profile Page</h1>
+  {% if badges %}
+    <h3>Badges Earned:</h3>
+    <ul>
+      {% for badge in badges %}
+        <li>{{ badge }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
-<p>Name: {{ profile.user.first_name }} {{ profile.user.last_name }}</p>
-<p>Email: {{ profile.user.email }}</p>
-
-{% if profile.image %}
-  <img src="{{ profile.image.url }}">
-{% else %}
-  <p>User has no profile picture</p>
-{% endif %}
-
-{% if badges %}
-  <h3>Badges Earned:</h3>
+  <h3>Trivia Attempts:</h3>
   <ul>
-    {% for badge in badges %}
-      <li>{{ badge }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-<h3>Trivia Attempts:</h3>
-<ul>
-  {% for attempt in trivia_attempts %}
-    <li>
-      <a href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.category|title }} | Score: {{ attempt.score }}</a>
-    </li>
-  {% empty %}
-
-  <li>User has no trivia attempts</li>
-  {% endfor %}
-</ul>
-
-{% if player_trivia_stats %}
-
-  <h3>Player Trivia Stats:</h3>
-  <ul>
-    <li>Total Trivia Attempts: {{ player_trivia_stats.total_attempts }}</li>
-    <li>Average Score for All Trivia Attempts: {{ player_trivia_stats.avg_score }}</li>
-    <li>Highest Score: {{ player_trivia_stats.highest_score }}</li>
-    <li>Lowest Score: {{ player_trivia_stats.lowest_score }}</li>
-    <li>Most Attempted Category: {{ player_trivia_stats.most_attempted_category|title }}</li>
-    <li>Number of Attempted Categories: {{ player_trivia_stats.number_categories }}</li>
-  </ul>
-
-  <h3>Average Score based on Category:</h3>
-  <ul>
-    {% for category, avg_val in player_trivia_stats.category_averages.items %}
-      <li>{{ category|title }}: {{ avg_val }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-
-{% if categories_attempted %}
-  <h3>Trivia Score Graph Analysis:</h3>
-  <ul>
-    {% for category in categories_attempted %}
+    {% for attempt in trivia_attempts %}
       <li>
-        <a href="{% url 'triviascore_graph' category %}">{{ category|title }} Trivia Score Graph</a>
+        <a class="trivia-attempt-link" href="{% url 'attempt_detail' attempt.pk %}">{{ attempt.category|title }} | Score: {{ attempt.score }}</a><br><br>
       </li>
+    {% empty %}
+
+    <li>User has no trivia attempts</li>
     {% endfor %}
   </ul>
-{% endif %}
 
+  {% if player_trivia_stats %}
 
+    <h3>Player Trivia Stats:</h3>
+    <ul>
+      <li>Total Trivia Attempts: {{ player_trivia_stats.total_attempts }}</li>
+      <li>Average Score for All Trivia Attempts: {{ player_trivia_stats.avg_score }}</li>
+      <li>Highest Score: {{ player_trivia_stats.highest_score }}</li>
+      <li>Lowest Score: {{ player_trivia_stats.lowest_score }}</li>
+      <li>Most Attempted Category: {{ player_trivia_stats.most_attempted_category|title }}</li>
+      <li>Number of Attempted Categories: {{ player_trivia_stats.number_categories }}</li>
+    </ul>
+
+    <h3>Average Score based on Category:</h3>
+    <ul>
+      {% for category, avg_val in player_trivia_stats.category_averages.items %}
+        <li>{{ category|title }}: {{ avg_val }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if radar_div and bar_div %}
+    <div class="full-profile-graph-container">
+      <div class="profile-graph-container">{{ bar_div|safe }}</div>
+      <div class="profile-graph-container">{{ radar_div|safe }}</div>
+    </div>
+  {% endif %}
+
+  {% if categories_attempted %}
+    <h3>Trivia Score Per Category Graph Analysis:</h3>
+    <div class="category-button-container">
+      {% for category in categories_attempted %}
+          <a class="category-button" href="{% url 'triviascore_graph' profile.pk category %}">{{ category|title }} Trivia Score Graph</a>
+      {% endfor %}
+  </div>
+  {% endif %}
+</div>
 
 
 {% endblock %}

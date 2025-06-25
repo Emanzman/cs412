@@ -1,0 +1,234 @@
+/* Body styling */
+body {
+  background-color: rgb(212, 243, 212);
+  font-family: "Fira Sans Condensed", sans-serif;
+  margin: 0;
+}
+
+/* Navbar styling */
+nav {
+  background-color: rgb(23, 137, 78);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.nav-left {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nav-regular {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.nav-regular form {
+  display: inline-flex;
+  margin: 0;
+}
+
+.nav-regular form button {
+  background: none;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.nav-regular form button:hover {
+  background-color:rgb(19, 105, 61);
+}
+
+nav a, nav button {
+  background: none;
+  color: white;
+  text-decoration: none;
+  border: none;
+  font-weight: bold;
+  padding: 10px;
+}
+
+nav a:hover, nav button:hover {
+  background-color:rgb(19, 105, 61);
+  border-radius: 4px;
+}
+
+h1, h2, h3 {
+  color: rgb(23, 137, 78);
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  border: 1px solid rgb(227, 225, 225);
+  text-align: center;
+  padding: 12px;
+}
+
+table thead {
+  background-color: rgb(23, 137, 78);
+  color: white;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+button {
+  background-color: rgb(23, 137, 78);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: rgb(19, 105, 61);
+}
+
+/* Container for content on each page styling */
+.container {
+  background-color: rgb(252, 252, 252);
+  max-width: 90%;
+  margin: 40px auto;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 20px 100px rgba(19, 146, 63, 0.12);
+}
+
+/* Specific container type styling */
+.content-container,
+.form-container,
+.list-container,
+.graph-container {
+  margin-bottom: 30px;
+}
+
+.form-container form input,
+.form-container form select,
+.form-container form textarea {
+  border-radius: 5px;
+  border: 1px solid rgb(206, 199, 199);
+  padding: 4px;
+  font-size: 1rem;
+}
+
+/* Spacing between for loop elements in question list */
+
+.question-manage {
+  margin-bottom: 20px;
+}
+
+/* Choice section of edit question form */
+
+.choice-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.edit-question-choice-input{
+  flex: 1;
+  max-width: 300px;
+}
+
+/* List styling */
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ol {
+  padding-left: 15px;
+}
+
+/* Profile Styling */
+
+.full-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Graph container override for Plotly chart */
+.graph-container {
+  max-width: 100%;
+  margin: auto;
+  height: 400px;
+}
+
+.profile-graph-container {
+  width: 500px;
+  margin: 0;
+  height: 400px;
+  text-align: left;
+}
+
+.full-profile-graph-container{
+  display: flex;
+  gap: 10px;
+}
+
+/* Play page styling */
+
+.horizontal-category-section {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.horizontal-category-section .category-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.category-button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.category-button {
+  background-color: rgb(23, 137, 78);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+.category-button:visited {
+  color: white;
+  text-decoration: none;
+}
+
+
+/* Trivia attempt link styling */
+.trivia-attempt-link{
+  text-decoration: none;
+}

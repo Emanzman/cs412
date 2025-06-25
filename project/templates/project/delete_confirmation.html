@@ -1,0 +1,21 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
+<!-- Page showing confirmation of deleting a question -->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<div class="content-container">
+  <h1>Are you sure you want to delete this question?</h1>
+  <p>{{ question.question_text }}</p>
+
+  {% if question.image %}
+    <img src="{{ question.image.url }}">
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+    <a href="{% url 'question_list' %}">Go Back</a>
+  </form>
+</div>
+{% endblock %}

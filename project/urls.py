@@ -1,11 +1,14 @@
 from django.urls import path
-from .views import QuestionListView, QuestionDetailView, TriviaAttemptListView, TriviaAttemptDetailView, CategorySelectionView, QuestionCategoryListView, ShowProfilePageView, CreateProfileView, RedirectToProfileView, QuestionCreateView, TriviaAttemptView, TriviaLeaderboardView, QuestionEditView, TriviaScoreGraphView
+from .views import QuestionListView, QuestionDetailView, TriviaAttemptListView, TriviaAttemptDetailView, CategorySelectionView, QuestionCategoryListView, ShowProfilePageView, CreateProfileView, RedirectToProfileView, QuestionCreateView, TriviaAttemptView, TriviaLeaderboardView, QuestionEditView, TriviaScoreGraphView, QuestionDeleteView, HomePageView
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 
+# Emmanuel Eyob emanzman@bu.edu
+
 urlpatterns = [
-    path('', CategorySelectionView.as_view(), name='category_selection'),
+    path('', HomePageView.as_view(), name='home'),
+    path('categories/', CategorySelectionView.as_view(), name='category_selection'),
     path('questions/', QuestionListView.as_view(), name='question_list'),
     path('questions/<int:pk>/', QuestionDetailView.as_view(), name='question_detail'),
     path('attempts/', TriviaAttemptListView.as_view(), name='attempt_list'),
@@ -20,7 +23,9 @@ urlpatterns = [
     path('trivia_attempt/<str:category>/', TriviaAttemptView.as_view(), name='trivia_attempt'),
     path('trivia_leaderboard/', TriviaLeaderboardView.as_view(), name='trivia_leaderboard'),
     path('questions/<int:pk>/edit/', QuestionEditView.as_view(), name='edit_question'),
-    path('profile/triviascore-graph/<str:category>/', TriviaScoreGraphView.as_view(), name='triviascore_graph'),
+    path('profile/<int:profile_pk>/triviascore-graph/<str:category>/', TriviaScoreGraphView.as_view(), name='triviascore_graph'),
+    path('questions/<int:pk>/delete/', QuestionDeleteView.as_view(), name='delete_question'),
+
 
 
 ]

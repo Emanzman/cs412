@@ -1,16 +1,21 @@
-<!-- Page With a List of All Questions from the Ethiopian Trivia Web App-->
+<!-- Emmanuel Eyob emanzman@bu.edu-->
+<!-- Page With a List of All Questions from the Ethiopian Trivia Web App with Option to Edit and Delete-->
 <!-- Accessible only to staff users -->
 {% extends 'project/base.html' %}
 
 {% block content %}
-
-<h1>All Questions</h1>
-<ul>
-  {% for question in questions %}
-  <li><a href="{% url 'question_detail' question.pk %}">{{ question.question_text }}</a></li>
-  <a href="{% url 'edit_question' question.pk %}">Edit Question</a>
-  {% empty %}
-  <li>No questions yet.</li>
-  {% endfor %}
-</ul>
+<div class="list-container">
+  <h1>All Questions</h1>
+  <ul>
+    {% for question in questions %}
+    <div class="question-manage">
+      <li><a href="{% url 'question_detail' question.pk %}">{{ question.question_text }}</a></li>
+      <a href="{% url 'edit_question' question.pk %}">Edit Question</a>
+      <a href="{% url 'delete_question' question.pk %}">Delete Question</a>
+    </div>
+    {% empty %}
+    <li>No questions yet.</li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

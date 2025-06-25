@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Emmanuel Eyob emanzman@bu.edu
 # Models for Ethiopian Trivia App
 # Create your models here.
 

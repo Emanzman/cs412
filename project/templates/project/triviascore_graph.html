@@ -1,11 +1,14 @@
+<!-- Emmanuel Eyob emanzman@bu.edu-->
 <!-- Page Displaying the Graph of User Score History Based on Category-->
 
 {% extends 'project/base.html' %}
 
 {% block content %}
-  <h1>{{ request.user.username }}'s Trivia Score Graph for Category: {{ category|title }}</h1>
-  <div>
+<div class="content-container">
+  <h1>{{ profile.user.username }}'s Trivia Score Graph for Category: {{ category|title }}</h1>
+  <div class="graph-container">
     {{ score_graph|safe }}
   </div>
-  <a href="{% url 'show_profile' request.user.project_profile.pk %}">Return to Profile</a>
-  {% endblock %}
+  <a href="{% url 'show_profile' profile.pk %}">Return to Profile</a>
+</div>
+{% endblock %}

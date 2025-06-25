@@ -1,12 +1,52 @@
-<!-- Homepage for Ethiopian Trivia Web App -->
+<!-- Emmanuel Eyob emanzman@bu.edu-->
+<!-- Category Selection Page for Ethiopian Trivia Web App -->
+<!-- Users start the trivia attempt on this page and see instructions on how to play, features, and badges-->
 
 {% extends 'project/base.html' %}
 
 {% block content %}
-<h2>Pick an Ethiopian Trivia Category</h2>
-<ul>
-    {% for val, category_label in categories %}
-        <li><a href="{% url 'trivia_attempt' val %}">{{ category_label }}</a></li>
-    {% endfor %}
-</ul>
+<div class="content-container">
+    <h1>🇪🇹 Welcome to the Ethiopian Trivia App 🇪🇹</h2><br>
+    <h2>Pick an Ethiopian Trivia Category to Start Playing</h2>
+    <div class="category-button-container">
+        {% for val, category_label in categories %}
+                <a class="category-button" href="{% url 'trivia_attempt' val %}">{{ category_label }}</a></li>
+        {% endfor %}
+    </div>
+    <br>
+    <div class="horizontal-category-section">
+        <div class="category-section">
+            <h2>How to Play Ethiopian Trivia</h2>
+            <ol>
+                <li>Click the link in a category to choose which category to play in</li>
+                <li>Answer the 20 questions in your category and finish the quiz</li>
+                <li>You get 5 points for each correct answer and it is scored out of 100</li>
+                <li>View the details of your quiz and see where you stand on the leaderboard</li>
+            </ol>
+        </div>
+
+        <div class="category-section">
+            <h2>Features of the Ethiopian Trivia App</h2>
+            <ul>
+                <li>Take a trivia quiz in a category of your choice and learn about Ethiopia</li>
+                <li>Track your trivia score and view your progress</li>
+                <li>View your trivia scores visually with a graph</li>
+                <li>Compete with other users on the leaderboard</li>
+                <li>Earn badges for your trivia attempts</li>
+            </ul>
+        </div>
+
+        <div class="category-section">
+            <h2>Badges You Can Earn</h2>
+            <ul>
+                <li>Perfectionist | Scored 100 on a trivia attempt</li>
+                <li>Dedicated | Completed 5+ trivia attempts</li>
+                <li>Veteran | Completed 10+ trivia attempts</li>
+                <li>Versatile | Attempted 3+ different categories</li>
+                <li>Improver | Improved score from first to lastest score</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
