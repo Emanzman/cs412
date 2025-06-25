@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import TriviaAttempt, Profile, Question, QuestionChoice
 
+# Emmanuel Eyob emanzman@bu.edu
+
 # Form page for Ethiopian Trivia App
 
 # Form that handles user registration
